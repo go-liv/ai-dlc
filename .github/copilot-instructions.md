@@ -20,3 +20,4 @@ Skills are step-by-step procedures for specific tasks. When the user references 
 | Skill | File | Summary |
 |-------|------|---------|
 | Hello World | `skills/hello-world/README.md` | Example template for creating new skills |
+| Plan | `skills/plan/README.md` | Reads project context and generates a structured work plan for downstream agents |

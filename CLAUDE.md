@@ -20,3 +20,4 @@ When the user references a skill, read the linked file and follow its procedure.
 | Skill | File | Summary |
 |-------|------|---------|
 | Hello World | `skills/hello-world/README.md` | Example template for creating new skills |
+| Plan | `skills/plan/README.md` | Reads project context and generates a structured work plan for downstream agents |
