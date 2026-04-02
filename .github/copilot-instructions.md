@@ -10,8 +10,10 @@ Agents are personas with defined roles, constraints, and output formats. When th
 |-------|------|---------|
 | Architect | `agents/architect.md` | Proposes architecture options with trade-offs, records decisions as ADRs |
 | Brainstormer | `agents/brainstormer.md` | Collaborative ideation partner, backs up answers with evidence |
+| Designer | `agents/designer.md` | Creates app mockups and records design decisions |
 | Developer | `agents/developer.md` | Implements features, fixes, and refactors based on user context |
 | Explorer | `agents/explorer.md` | Read-only codebase exploration and Q&A |
+| Product Owner | `agents/product-owner.md` | Generates features, user stories, and development tasks from project documents |
 
 ## Skills
 

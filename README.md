@@ -4,21 +4,14 @@ A library of reusable AI agents and skills. Works across VS Code Copilot, Cursor
 
 ## Setup
 
-### VS Code Copilot (full native integration)
+### VS Code Copilot
 
-**Option A — GitHub URL (no clone, prompt-driven):**
-1. In Copilot Chat, type `#` or run **Chat: Add Context**
-2. Select **GitHub Repository**
-3. Paste this repo's URL
-4. Reference agents by name in your prompts (e.g., "act as the architect agent")
-
-**Option B — Workspace folder (agent picker + auto-routing):**
 1. Clone this repo
 2. `File > Add Folder to Workspace...` → select the `ai-dlc` folder
 3. Agents appear in the **agent picker** dropdown in chat — select one and type your prompt
 4. Skills are auto-discovered — agents choose the right skill based on your prompt
 
-> Option B is the most seamless experience: pick an agent from the dropdown, type a prompt, and skills are routed automatically.
+> This is the most seamless experience: pick an agent from the dropdown, type a prompt, and skills are routed automatically.
 
 ### Cursor (prompt-driven)
 
@@ -53,12 +46,12 @@ Claude doesn't have a native agent picker. The LLM follows agent/skill instructi
 
 ### Platform Comparison
 
-| Feature | VS Code Copilot (workspace) | VS Code Copilot (URL) | Cursor | Claude |
-|---------|---------------------------|----------------------|--------|--------|
-| Agent picker UI | Yes | No | No | No |
-| Skill auto-routing | Yes | No | No | No |
-| Prompt-driven agents | Yes | Yes | Yes | Yes |
-| Clone required | Yes | No | No | No* |
+| Feature | VS Code Copilot | Cursor | Claude |
+|---------|-----------------|--------|--------|
+| Agent picker UI | Yes | No | No |
+| Skill auto-routing | Yes | No | No |
+| Prompt-driven agents | Yes | Yes | Yes |
+| Clone required | Yes | No | No* |
 
 \* Claude Projects can index a GitHub URL directly; Claude Code requires a clone.
 
@@ -79,9 +72,6 @@ Agents appear in the picker dropdown. Skills are auto-routed.
 > "Set up a new Express API with health check endpoint"
 >
 > The developer agent activates and picks the relevant skill if one matches.
-
-**Using an agent via prompt (URL setup):**
-> "Act as the architect agent from ai-dlc. I need to decide between a monolith and microservices for a new e-commerce platform."
 
 **Invoking a skill directly (slash command):**
 > Type `/hello-world` in chat to invoke the skill by name.
