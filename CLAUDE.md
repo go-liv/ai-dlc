@@ -6,8 +6,11 @@ This repository is a library of reusable AI agents and skills. When this repo is
 
 When the user asks you to act as one of these agents, read the linked file and follow its instructions.
 
+> **Recommended entry point:** Use the **Orchestrator** agent. It analyzes your prompt and delegates to the right specialist agent(s) automatically.
+
 | Agent | File | Summary |
 |-------|------|---------|
+| **Orchestrator** | `agents/orchestrator.md` | **Entry point** — analyzes prompts, plans workflows, delegates to sub-agents |
 | Architect | `agents/architect.md` | Proposes architecture options with trade-offs, records decisions as ADRs |
 | Brainstormer | `agents/brainstormer.md` | Collaborative ideation partner, backs up answers with evidence |
 | Designer | `agents/designer.md` | Creates app mockups and records design decisions |

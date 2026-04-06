@@ -2,16 +2,18 @@
 
 A library of reusable AI agents and skills. Works across VS Code Copilot, Cursor, and Claude.
 
+> **Start here:** Use the **Orchestrator** agent. It analyzes your prompt and automatically delegates to the right specialist agent(s). You never need to pick a leaf agent yourself.
+
 ## Setup
 
 ### VS Code Copilot
 
 1. Clone this repo
 2. `File > Add Folder to Workspace...` → select the `ai-dlc` folder
-3. Agents appear in the **agent picker** dropdown in chat — select one and type your prompt
-4. Skills are auto-discovered — agents choose the right skill based on your prompt
+3. Open Copilot Chat → click the **agent picker** dropdown → select **orchestrator**
+4. Type your prompt — the orchestrator analyzes it and delegates to the right sub-agent(s) via `runSubagent`
 
-> This is the most seamless experience: pick an agent from the dropdown, type a prompt, and skills are routed automatically.
+> This is the most seamless experience: the orchestrator handles multi-agent workflows natively. You can also pick individual agents from the dropdown if you want direct access.
 
 ### Cursor (prompt-driven)
 
@@ -21,13 +23,13 @@ Cursor doesn't have a native agent picker. The LLM follows agent/skill instructi
 1. Go to **Cursor Settings > Features > Docs**
 2. Add this repo's GitHub URL
 3. In chat, type `@Docs` to pull in the repo as context
-4. Reference agents by name (e.g., "act as the developer agent")
+4. Say "act as the orchestrator agent" — it will delegate to specialists automatically
 
 **Option B — Workspace folder:**
 1. Clone this repo
 2. Add it as a workspace folder
 3. Cursor auto-reads `.cursorrules`, which indexes all agents and skills
-4. Reference agents by name in your prompts
+4. Say "act as the orchestrator agent" or reference any agent by name
 
 ### Claude (prompt-driven)
 
@@ -37,18 +39,19 @@ Claude doesn't have a native agent picker. The LLM follows agent/skill instructi
 1. Create or open a Project on claude.ai
 2. In Project Knowledge, add this repo's GitHub URL or upload the files
 3. Claude reads `CLAUDE.md` as the index
-4. Reference agents by name (e.g., "act as the brainstormer agent")
+4. Say "act as the orchestrator agent" — it will delegate to specialists automatically
 
 **Claude Code (CLI):**
 1. Clone this repo into or alongside your project
 2. Claude Code auto-reads `CLAUDE.md`
-3. Reference agents by name in your prompts
+3. Say "act as the orchestrator agent" or reference any agent by name
 
 ### Platform Comparison
 
 | Feature | VS Code Copilot | Cursor | Claude |
 |---------|-----------------|--------|--------|
 | Agent picker UI | Yes | No | No |
+| Multi-agent orchestration | Native (`runSubagent`) | Simulated (persona switching) | Simulated (persona switching) |
 | Skill auto-routing | Yes | No | No |
 | Prompt-driven agents | Yes | Yes | Yes |
 | Clone required | Yes | No | No* |
@@ -59,19 +62,21 @@ Claude doesn't have a native agent picker. The LLM follows agent/skill instructi
 
 ### VS Code Copilot (workspace folder — native)
 
-Agents appear in the picker dropdown. Skills are auto-routed.
+The orchestrator is the recommended entry point. It uses `runSubagent` to delegate to specialists.
 
-**Selecting an agent:**
+**Using the orchestrator (recommended):**
 1. Open Copilot Chat
-2. Click the agent picker (dropdown at the top of chat)
-3. Select **architect**, **developer**, etc.
-4. Type your prompt — the agent persona is active automatically
+2. Click the agent picker → select **orchestrator**
+3. Type your prompt — it analyzes, plans, and delegates automatically
 
-**Agent + auto-routed skill:**
-> *[Select `developer` from picker]*
-> "Set up a new Express API with health check endpoint"
+> *[Select `orchestrator` from picker]*
+> "Build a REST API for user management with JWT auth"
 >
-> The developer agent activates and picks the relevant skill if one matches.
+> The orchestrator plans a workflow: Explorer → Architect → Developer, executing each via `runSubagent`.
+
+**Using a single agent directly:**
+1. Click the agent picker → select **developer**, **architect**, etc.
+2. Type your prompt — the agent persona is active
 
 **Invoking a skill directly (slash command):**
 > Type `/hello-world` in chat to invoke the skill by name.
@@ -80,13 +85,15 @@ Agents appear in the picker dropdown. Skills are auto-routed.
 
 ### Cursor
 
-Reference agents and skills by name in your prompt. If using `@Docs`, Cursor pulls in the repo context.
+The orchestrator works via persona switching — it reads each agent's definition and adopts it for that phase.
 
-**Using an agent:**
-> "@Docs act as the architect agent. I'm building a real-time notification system and need to choose between WebSockets, SSE, and polling."
+**Using the orchestrator (recommended):**
+> "Act as the orchestrator agent. Build a REST API for user management with JWT auth."
+>
+> The orchestrator reads each needed agent's definition, delegates tasks sequentially, and synthesizes the result.
 
-**Using an agent (workspace folder):**
-> "Act as the developer agent. Refactor the auth middleware in `src/middleware/auth.ts` to use JWT verification."
+**Using a single agent directly:**
+> "Act as the architect agent. I'm building a real-time notification system and need to choose between WebSockets, SSE, and polling."
 
 **Using a skill:**
 > "Follow the hello-world skill from ai-dlc to verify the setup is working."
@@ -98,12 +105,14 @@ Reference agents and skills by name in your prompt. If using `@Docs`, Cursor pul
 
 ### Claude
 
-Reference agents and skills by name. Claude reads the index and follows the linked instructions.
+The orchestrator works via persona switching — it reads each agent's definition and adopts it for that phase.
 
-**Using an agent (Claude Projects):**
-> "Act as the brainstormer agent. I want to build a CLI tool for managing dotfiles but I'm not sure what language or approach to use."
+**Using the orchestrator (recommended):**
+> "Act as the orchestrator agent. I want to add a dashboard to the app but I'm not sure what to show."
+>
+> The orchestrator chains: Brainstormer → Designer → Architect → Developer, switching personas at each step.
 
-**Using an agent (Claude Code):**
+**Using a single agent directly:**
 > "Act as the explorer agent. Find all the places where we handle authentication errors and summarize the patterns used."
 
 **Using a skill:**
@@ -117,22 +126,32 @@ Reference agents and skills by name. Claude reads the index and follows the link
 ```
 ai-dlc/
 ├── agents/                          # Canonical agent definitions (any LLM)
+│   ├── orchestrator.md              # ★ Entry point — delegates to sub-agents
 │   ├── architect.md
 │   ├── brainstormer.md
+│   ├── designer.md
 │   ├── developer.md
-│   └── explorer.md
+│   ├── explorer.md
+│   └── product-owner.md
 ├── skills/                          # Canonical skill definitions (any LLM)
-│   └── hello-world/
+│   ├── hello-world/
+│   │   └── README.md
+│   └── plan/
 │       └── README.md
 ├── .github/
 │   ├── copilot-instructions.md      # Copilot: workspace instructions (index)
 │   ├── agents/                      # Copilot: native agent picker entries
+│   │   ├── orchestrator.agent.md    # ★ Copilot orchestrator (uses runSubagent)
 │   │   ├── architect.agent.md
 │   │   ├── brainstormer.agent.md
+│   │   ├── designer.agent.md
 │   │   ├── developer.agent.md
-│   │   └── explorer.agent.md
+│   │   ├── explorer.agent.md
+│   │   └── product-owner.agent.md
 │   └── skills/                      # Copilot: native skill auto-routing
-│       └── hello-world/
+│       ├── hello-world/
+│       │   └── SKILL.md
+│       └── plan/
 │           └── SKILL.md
 ├── .cursorrules                     # Cursor entry point
 └── CLAUDE.md                        # Claude entry point
@@ -146,16 +165,20 @@ ai-dlc/
 
 | Agent | Description |
 |-------|-------------|
+| **[orchestrator](agents/orchestrator.md)** | **Entry point** — analyzes prompts, plans workflows, delegates to sub-agents |
 | [architect](agents/architect.md) | Proposes architecture options with trade-offs, records decisions as ADRs |
 | [brainstormer](agents/brainstormer.md) | Collaborative ideation partner, backs up answers with evidence |
+| [designer](agents/designer.md) | Creates app mockups and records design decisions |
 | [developer](agents/developer.md) | Implements features, fixes, and refactors based on user context |
 | [explorer](agents/explorer.md) | Read-only codebase exploration and Q&A |
+| [product-owner](agents/product-owner.md) | Generates features, user stories, and development tasks from project documents |
 
 ## Skills
 
 | Skill | Description |
 |-------|-------------|
 | [hello-world](skills/hello-world/README.md) | Example template for creating new skills |
+| [plan](skills/plan/README.md) | Reads project context and generates a structured work plan |
 
 ## Adding an Agent
 
