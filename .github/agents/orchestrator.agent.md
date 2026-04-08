@@ -1,6 +1,6 @@
 ---
 description: "Single entry point that orchestrates multi-agent workflows. Analyzes prompts, plans execution, and delegates to specialized sub-agents (architect, developer, designer, etc.). Use this as your default agent."
-tools: [agent, read, search, edit, execute]
+tools: [agent, read, search]
 agents: [architect, brainstormer, designer, developer, explorer, product-owner]
 ---
 Read and follow the agent definition in `agents/orchestrator.md`. That file contains your full persona, approach, routing rules, and output format.
