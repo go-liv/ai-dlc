@@ -11,9 +11,9 @@ A library of reusable AI agents and skills. Works across VS Code Copilot, Cursor
 1. Clone this repo
 2. `File > Add Folder to Workspace...` → select the `ai-dlc` folder
 3. Open Copilot Chat → click the **agent picker** dropdown → select **orchestrator**
-4. Type your prompt — the orchestrator analyzes it and delegates to the right sub-agent(s) via `runSubagent`
+4. Type your prompt — the orchestrator analyzes it and delegates to the right sub-agent(s)
 
-> This is the most seamless experience: the orchestrator handles multi-agent workflows natively. You can also pick individual agents from the dropdown if you want direct access.
+> This is the most seamless experience: the orchestrator's `agents` frontmatter declares which sub-agents it can invoke, and the `agent` tool enables native subagent dispatch. Sub-agents are hidden from the picker (`user-invocable: false`) since they're meant to be invoked by the orchestrator.
 
 ### Cursor (prompt-driven)
 
@@ -51,7 +51,7 @@ Claude doesn't have a native agent picker. The LLM follows agent/skill instructi
 | Feature | VS Code Copilot | Cursor | Claude |
 |---------|-----------------|--------|--------|
 | Agent picker UI | Yes | No | No |
-| Multi-agent orchestration | Native (`runSubagent`) | Simulated (persona switching) | Simulated (persona switching) |
+| Multi-agent orchestration | Native (subagents via `agents` frontmatter) | Simulated (persona switching) | Simulated (persona switching) |
 | Skill auto-routing | Yes | No | No |
 | Prompt-driven agents | Yes | Yes | Yes |
 | Clone required | Yes | No | No* |
@@ -62,7 +62,7 @@ Claude doesn't have a native agent picker. The LLM follows agent/skill instructi
 
 ### VS Code Copilot (workspace folder — native)
 
-The orchestrator is the recommended entry point. It uses `runSubagent` to delegate to specialists.
+The orchestrator is the recommended entry point. It natively delegates to specialist sub-agents.
 
 **Using the orchestrator (recommended):**
 1. Open Copilot Chat
@@ -72,11 +72,9 @@ The orchestrator is the recommended entry point. It uses `runSubagent` to delega
 > *[Select `orchestrator` from picker]*
 > "Build a REST API for user management with JWT auth"
 >
-> The orchestrator plans a workflow: Explorer → Architect → Developer, executing each via `runSubagent`.
+> The orchestrator plans a workflow: Explorer → Architect → Developer, invoking each as isolated subagents.
 
-**Using a single agent directly:**
-1. Click the agent picker → select **developer**, **architect**, etc.
-2. Type your prompt — the agent persona is active
+> **Note:** Sub-agents are set to `user-invocable: false` and won't appear in the agent picker. They are only accessible through the orchestrator.
 
 **Invoking a skill directly (slash command):**
 > Type `/hello-world` in chat to invoke the skill by name.
@@ -140,9 +138,9 @@ ai-dlc/
 │       └── README.md
 ├── .github/
 │   ├── copilot-instructions.md      # Copilot: workspace instructions (index)
-│   ├── agents/                      # Copilot: native agent picker entries
-│   │   ├── orchestrator.agent.md    # ★ Copilot orchestrator (uses runSubagent)
-│   │   ├── architect.agent.md
+│   ├── agents/                      # Copilot: native agent definitions
+│   │   ├── orchestrator.agent.md    # ★ Copilot orchestrator (declares subagents)
+│   │   ├── architect.agent.md       # user-invocable: false (subagent only)
 │   │   ├── brainstormer.agent.md
 │   │   ├── designer.agent.md
 │   │   ├── developer.agent.md
@@ -206,7 +204,10 @@ Who the agent is and what its purpose is.
 What the agent returns.
 ```
 
-Then add it to the **Agents** table above and to each platform entry point (`.github/copilot-instructions.md`, `.cursorrules`, `CLAUDE.md`).
+Then:
+1. Add it to the **Agents** table above and to each platform entry point (`.github/copilot-instructions.md`, `.cursorrules`, `CLAUDE.md`).
+2. Create a `.github/agents/<name>.agent.md` wrapper with `user-invocable: false` so it's only accessible as a subagent.
+3. Add the agent name to the `agents` list in `.github/agents/orchestrator.agent.md` so the orchestrator can invoke it.
 
 ## Adding a Skill
 

@@ -22,7 +22,18 @@ Agents are personas with defined roles, constraints, and output formats. When th
 
 Skills are step-by-step procedures for specific tasks. When the user references a skill, read the linked file and follow its procedure.
 
-| Skill | File | Summary |
-|-------|------|---------|
-| Hello World | `skills/hello-world/README.md` | Example template for creating new skills |
-| Plan | `skills/plan/README.md` | Reads project context and generates a structured work plan for downstream agents |
+| Skill | File | Agents | Summary |
+|-------|------|--------|---------|
+| Hello World | `skills/hello-world/README.md` | — | Example template for creating new skills |
+| Plan | `skills/plan/README.md` | Product Owner, Orchestrator | Reads project context and generates a structured work plan for downstream agents |
+| Code Review | `skills/code-review/README.md` | Developer, Architect, Explorer | Systematic code review with quality, security, and convention checks |
+| Research | `skills/research/README.md` | Brainstormer, Architect, Designer | Structured technology and pattern research with evidence |
+| Document | `skills/document/README.md` | Architect, Designer, Developer, Product Owner | Generate and update project documentation |
+| ADR | `skills/adr/README.md` | Architect | Architecture Decision Record lifecycle management |
+| Wireframe | `skills/wireframe/README.md` | Designer | Text-based wireframes and UI component specifications |
+| Story Map | `skills/story-map/README.md` | Product Owner | User story mapping with personas, activities, and release slices |
+| Dependency Map | `skills/dependency-map/README.md` | Explorer | Trace and map code dependencies and call chains |
+| Scaffold | `skills/scaffold/README.md` | Developer | Generate boilerplate by discovering and replicating existing project patterns |
+| Debug | `skills/debug/README.md` | Developer | Systematic hypothesis-driven debugging with root cause analysis |
+| Test Gen | `skills/test-gen/README.md` | Developer | Generate test cases — happy paths, edge cases, error scenarios |
+| Spike | `skills/spike/README.md` | Brainstormer, Architect | Time-boxed technical investigation with go/no-go verdict |

@@ -29,6 +29,17 @@ You can invoke these skills as part of a workflow.
 | Skill | File | Use When |
 |-------|------|----------|
 | Plan | `skills/plan/README.md` | Generating a structured work plan from project context |
+| Code Review | `skills/code-review/README.md` | Reviewing code for quality, security, and correctness |
+| Research | `skills/research/README.md` | Investigating technologies, patterns, or approaches with evidence |
+| Document | `skills/document/README.md` | Generating or updating project documentation |
+| ADR | `skills/adr/README.md` | Recording architecture decisions formally |
+| Wireframe | `skills/wireframe/README.md` | Creating text-based UI wireframes and component specs |
+| Story Map | `skills/story-map/README.md` | Organizing features into user story maps with release slices |
+| Dependency Map | `skills/dependency-map/README.md` | Tracing code dependencies and mapping component relationships |
+| Scaffold | `skills/scaffold/README.md` | Generating boilerplate code from existing project patterns |
+| Debug | `skills/debug/README.md` | Systematic debugging to find root cause of bugs |
+| Test Gen | `skills/test-gen/README.md` | Generating test cases for existing or new code |
+| Spike | `skills/spike/README.md` | Time-boxed technical investigation to reduce uncertainty |
 
 ## Approach
 
@@ -50,7 +61,9 @@ Present the plan to the developer for confirmation before executing. For obvious
 
 ### 3. Delegate
 
-**On VS Code Copilot:** Use the `runSubagent` tool to dispatch tasks to agents by name. Each sub-agent runs in isolation and returns a result.
+**On VS Code Copilot:** The orchestrator's `.agent.md` file declares an `agents` list in its frontmatter, which restricts which custom agents can be invoked as subagents. The `agent` tool enables the `runSubagent` capability. When you delegate, the sub-agent runs in isolation with its own tools and instructions, and returns a result to the orchestrator.
+
+> To add a new sub-agent to the orchestrator, add its name to the `agents` list in `.github/agents/orchestrator.agent.md`. Sub-agents should set `user-invocable: false` so they only appear when invoked by the orchestrator, not in the agents dropdown.
 
 **On Claude Code / Cursor:** Read the target agent's definition file, adopt its persona for that phase of work, execute the task following its approach and constraints, then return to orchestrator mode. Clearly mark transitions:
 ```
@@ -74,11 +87,20 @@ Use these heuristics to pick the right agent(s):
 |---------------|----------|
 | "build", "implement", "fix", "refactor", "write code" | Developer |
 | "design", "architecture", "trade-offs", "choose between" | Architect |
-| "mockup", "UI", "UX", "layout", "wireframe" | Designer |
+| "mockup", "UI", "UX", "layout", "wireframe" | Designer + Wireframe skill |
 | "brainstorm", "ideas", "explore options", "not sure" | Brainstormer |
 | "find", "where is", "how does X work", "trace" | Explorer |
-| "user stories", "features", "backlog", "requirements" | Product Owner |
+| "user stories", "features", "backlog", "requirements" | Product Owner + Story Map skill |
 | "plan", "roadmap", "break this down" | Plan skill → then route tasks |
+| "review", "code review", "check quality" | Code Review skill (via Developer or Explorer) |
+| "debug", "bug", "not working", "fails", "error" | Developer + Debug skill |
+| "scaffold", "create new", "boilerplate", "generate" | Developer + Scaffold skill |
+| "test", "test cases", "coverage", "add tests" | Developer + Test Gen skill |
+| "research", "compare", "evaluate", "investigate" | Research skill (via Brainstormer or Architect) |
+| "spike", "proof of concept", "validate", "can we" | Spike skill (via Brainstormer or Architect) |
+| "document", "docs", "README", "write docs" | Document skill (via Developer or Architect) |
+| "dependencies", "imports", "who uses", "impact" | Explorer + Dependency Map skill |
+| "ADR", "record decision", "architecture decision" | Architect + ADR skill |
 | Complex feature request | Plan skill → Architect → Developer |
 | New project from scratch | Brainstormer → Architect → Designer → Product Owner → Developer |
 
@@ -90,13 +112,15 @@ When multiple agents are needed, chain them in dependency order. Pass outputs fr
 ```
 1. [Explorer] — scan codebase for existing patterns and conventions
 2. [Architect] — propose API design options (REST structure, auth, DB)
-3. [Developer] — implement the chosen design
+3. [Developer + Scaffold skill] — scaffold endpoint boilerplate from existing patterns
+4. [Developer] — implement the business logic
+5. [Developer + Test Gen skill] — generate test cases for the new endpoints
 ```
 
 **"I want to add a dashboard but I'm not sure what to show"**
 ```
-1. [Brainstormer] — explore what metrics/data matter
-2. [Designer] — mockup the dashboard layout
+1. [Brainstormer + Research skill] — research dashboard best practices, explore what metrics matter
+2. [Designer + Wireframe skill] — create text-based wireframes for the dashboard layout
 3. [Architect] — decide on data pipeline / backend needs
 4. [Developer] — implement it
 ```
@@ -104,7 +128,22 @@ When multiple agents are needed, chain them in dependency order. Pass outputs fr
 **"Create user stories for the payments feature"**
 ```
 1. [Plan skill] — gather all project context
-2. [Product Owner] — generate features, stories, and tasks
+2. [Product Owner + Story Map skill] — map user activities and generate stories with release slices
+```
+
+**"We have a bug in the checkout flow"**
+```
+1. [Explorer + Dependency Map skill] — trace the checkout flow and its dependencies
+2. [Developer + Debug skill] — form hypotheses, investigate systematically, find root cause
+3. [Developer] — implement the fix
+4. [Developer + Test Gen skill] — add regression tests
+```
+
+**"Review the auth module before we ship"**
+```
+1. [Explorer + Dependency Map skill] — map the auth module's dependencies and dependents
+2. [Code Review skill] — systematic review for quality, security, and correctness
+3. [Architect] — verify implementation matches architecture decisions
 ```
 
 ## Constraints
