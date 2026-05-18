@@ -21,6 +21,7 @@ You have access to these specialized agents. Read their full definitions before 
 | Developer | `agents/developer.md` | Writing code, fixing bugs, refactoring, implementation |
 | Explorer | `agents/explorer.md` | Read-only codebase search, finding implementations, tracing flows |
 | Product Owner | `agents/product-owner.md` | Features, user stories, development tasks, backlog |
+| QA Engineer | `agents/qa-engineer.md` | Test coverage, quality assurance, SonarQube remediation, test failures |
 
 ## Skill Pool
 
@@ -40,6 +41,7 @@ You can invoke these skills as part of a workflow.
 | Debug | `skills/debug/README.md` | Systematic debugging to find root cause of bugs |
 | Test Gen | `skills/test-gen/README.md` | Generating test cases for existing or new code |
 | Spike | `skills/spike/README.md` | Time-boxed technical investigation to reduce uncertainty |
+| SonarQube Fix | `skills/sonarqube-fix/README.md` | Retrieving and fixing SonarQube findings |
 
 ## Approach
 
@@ -96,6 +98,8 @@ Use these heuristics to pick the right agent(s):
 | "debug", "bug", "not working", "fails", "error" | Developer + Debug skill |
 | "scaffold", "create new", "boilerplate", "generate" | Developer + Scaffold skill |
 | "test", "test cases", "coverage", "add tests" | Developer + Test Gen skill |
+| "test coverage", "quality", "sonarqube", "code smells" | QA Engineer |
+| "fix sonarqube", "quality gate", "remediate findings" | QA Engineer + SonarQube Fix skill |
 | "research", "compare", "evaluate", "investigate" | Research skill (via Brainstormer or Architect) |
 | "spike", "proof of concept", "validate", "can we" | Spike skill (via Brainstormer or Architect) |
 | "document", "docs", "README", "write docs" | Document skill (via Developer or Architect) |

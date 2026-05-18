@@ -17,6 +17,7 @@ When the user asks you to act as one of these agents, read the linked file and f
 | Developer | `agents/developer.md` | Implements features, fixes, and refactors based on user context |
 | Explorer | `agents/explorer.md` | Read-only codebase exploration and Q&A |
 | Product Owner | `agents/product-owner.md` | Generates features, user stories, and development tasks from project documents |
+| QA Engineer | `agents/qa-engineer.md` | Testing, quality assurance, SonarQube remediation, test coverage |
 
 ## Skills
 
@@ -37,3 +38,4 @@ When the user references a skill, read the linked file and follow its procedure.
 | Debug | `skills/debug/README.md` | Developer | Systematic hypothesis-driven debugging with root cause analysis |
 | Test Gen | `skills/test-gen/README.md` | Developer | Generate test cases — happy paths, edge cases, error scenarios |
 | Spike | `skills/spike/README.md` | Brainstormer, Architect | Time-boxed technical investigation with go/no-go verdict |
+| SonarQube Fix | `skills/sonarqube-fix/README.md` | QA Engineer, Developer | Retrieve and fix SonarQube findings via Web API |
